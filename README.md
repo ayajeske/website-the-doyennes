@@ -7,7 +7,7 @@ Static homepage for The Doyennes (version B of the design: photo slider, paralla
 - `main.js`: hero and quote sliders, contact form
 - `images/`: photos
 
-The contact form currently opens an email to hanna@thedoyennes.com with the details filled in.
+The "Become one of us" form saves requests in Supabase (project `the-doyennes`, table `meeting_requests`). View them in the Supabase dashboard under Table Editor.
 
 ## Run locally
 

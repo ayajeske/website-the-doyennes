@@ -46,24 +46,44 @@
   makeSlider('hero', 6000, 'rgba(255,255,255,0.6)');
   makeSlider('quote', 5000, 'rgba(233,188,192,0.6)');
 
-  // Contact form: for now it opens an email to Hanna with the details filled in.
+  // Contact form: stores the request in Supabase (table meeting_requests).
+  // The publishable key is meant to be public; the database only lets visitors add requests, not read them.
+  var SUPABASE_URL = 'https://djwmiyluiuvsyxuoxhle.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_AcSWrOUa9ONeBnRODr47nw_-jjtBPXd';
+
   var form = document.getElementById('join-form');
   if (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var status = document.getElementById('form-status');
+      var button = form.querySelector('button[type="submit"]');
       if (!form.checkValidity()) {
         status.textContent = 'Please fill in your name and a valid email, and tick the consent box.';
         form.reportValidity();
         return;
       }
-      var name = form.elements.name.value.trim();
-      var email = form.elements.email.value.trim();
       var message = form.elements.message.value.trim();
-      var body = 'Name: ' + name + '\nEmail: ' + email + (message ? '\n\n' + message : '');
-      window.location.href = 'mailto:hanna@thedoyennes.com?subject=' +
-        encodeURIComponent('Meeting request: The Doyennes') + '&body=' + encodeURIComponent(body);
-      status.textContent = 'Your email app should open with your request. Thank you!';
+      var data = {
+        name: form.elements.name.value.trim(),
+        email: form.elements.email.value.trim(),
+        message: message || null,
+        consent: form.elements.consent.checked
+      };
+      button.disabled = true;
+      status.textContent = 'Sending…';
+      fetch(SUPABASE_URL + '/rest/v1/meeting_requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Prefer: 'return=minimal' },
+        body: JSON.stringify(data)
+      }).then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        form.reset();
+        status.textContent = 'Thank you! We received your request and will email you to schedule a meeting.';
+      }).catch(function () {
+        status.textContent = 'Sorry, something went wrong. Please email hanna@thedoyennes.com directly.';
+      }).then(function () {
+        button.disabled = false;
+      });
     });
   }
 })();
