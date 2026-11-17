@@ -13,6 +13,9 @@ details.dd[open] .chev{transform:rotate(180deg)}
 .trk{transition:transform .9s cubic-bezier(.65,0,.35,1)}
 .ql:hover .qa{transform:translateX(6px)}
 .qa{transition:transform .25s ease}
+.faq summary{list-style:none}
+.faq .plus{transition:transform .3s ease}
+.faq[open] .plus{transform:rotate(45deg)}
 @keyframes pxi{from{transform:translateY(-9%)}to{transform:translateY(9%)}}
 @keyframes pxb{from{transform:translateY(120px)}to{transform:translateY(-120px)}}
 @keyframes pxb2{from{transform:translateY(-90px)}to{transform:translateY(90px)}}
@@ -27,7 +30,7 @@ details.dd[open] .chev{transform:rotate(180deg)}
 }
 @media (prefers-reduced-motion: reduce){
 html{scroll-behavior:auto}
-.trk,.qa,.chev{transition:none !important}
+.trk,.qa,.chev,.faq .plus{transition:none !important}
 .pxi,.pxb,.pxb2,.rise,.tilt{animation:none !important}
 }
 @media (max-width: 760px){
